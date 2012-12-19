@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Permission">
+	<typeAlias alias="String" type="java.lang.String" />
+	<typeAlias alias="Permission" type="com.neusoft.example.ui.domain.security.Permission" />
+	<typeAlias alias="role2Per" type="com.neusoft.example.ui.domain.security.Role2Per" />
+
+	<resultMap id="permission-result" class="Permission">
+		<result property="id" column="ID" />
+		<result property="name" column="PER_NAME" />
+		<result property="ui" column="URL" />
+		<result property="flag" column="FLAG" />
+	</resultMap>
+	<resultMap id="permission-id-name" class="Permission">
+		<result property="id" column="ID" />
+		<result property="name" column="PER_NAME" />
+	</resultMap>
+	
+	<select id="getPermissions" parameterClass="String" resultMap="permission-result">
+		 SELECT DISTINCT 
+ 			p.ID,p.PER_NAME, p.URL,p. FLAG
+		 FROM 
+			 ELSP_user_t u,
+			 ELSP_user_role_MAP_t ur,
+			 ELSP_role_permission_t rp,
+			 ELSP_permission_t p
+		 WHERE
+			 u.name = #value#  and
+			 u.id = ur.user_id and
+			 ur.role_id = rp.role_id and
+			 rp.per_id = p.id
+	</select>
+	<select id="getAllPermission" parameterClass="String" resultMap="permission-id-name">
+		 SELECT DISTINCT
+			p.id,p.PER_NAME
+		 FROM
+			ELSP_permission_t p, ELSP_role_permission_t r
+			where p.id=r.per_id and r.role_id=#role_id#
+		 ORDER BY id 
+	</select>
+	
+	<insert id="insert" parameterClass="Permission"> 
+		INSERT INTO ELSP_permission_t  
+		       (`ID`,`PER_NAME`,`URL`,`FlAG`) 
+		VALUES ( #id#,#name#,#ui#,#flag#) 
+	</insert>
+	
+	<update id="update" parameterClass="Permission">
+		<![CDATA[
+		UPDATE ELSP_permission_t
+		SET
+		`ID`=#id#,
+		`PER_NAME`=#name#,
+		`URL`=#ui#,
+		`FLAG`=#flag#
+		WHERE `URL`=#ui#
+		]]>
+	</update>
+	
+	<update id="updateByUi" parameterClass="Permission">
+		<![CDATA[
+		UPDATE ELSP_permission_t
+		SET
+		`PER_NAME`=#name#
+		WHERE `URL`=#ui#
+		]]>
+	</update>
+	
+	<select id="getPermissionByUi" parameterClass="String" resultClass="Permission">
+		 SELECT  ID, PER_NAME, URL , FlAG
+		 FROM ELSP_permission_t
+         WHERE `URL`=#ui#
+	</select>
+	
+	<select id="getRoleByUI" parameterClass="String" resultClass="role2Per">
+		 SELECT  ROLE_ID, per_id
+		 FROM ELSP_permission_t PER, ELSP_role_permission_t ROLE
+         WHERE PER.`ID` = ROLE.`per_id` AND `URL`=#ui# 
+	</select>
+	
+	<delete id="delPermissionByUi" parameterClass="String">
+		<![CDATA[
+		DELETE FROM	ELSP_permission_t
+		WHERE `URL`=#ui#
+		]]>
+	</delete>
+	
+</sqlMap>

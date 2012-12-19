@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="excel" namespace="/" extends="default">
+		<action name="excelAction"
+			class="cn.com.framework.excel.ExcelAction">
+			<!-- /success.jsp表示相对于当前JSP的路径，如果没有则是工程的根目录 -->
+			<result name="success">excel/excelUpload.jsp</result>
+			<result name="list">excel/excelList.jsp</result>
+		</action>
+	</package>
+</struts>

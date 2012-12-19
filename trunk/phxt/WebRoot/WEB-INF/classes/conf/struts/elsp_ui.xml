@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	
+	<!-- 用户管理 -->
+	<package name="user" namespace="/user" extends="elsp-default">
+	
+		<!-- 用户信息浏览-->
+		<action name="user_browse" class="userAction" method="browse">
+			<result name="success">
+				/WEB-INF/pages/user/user_browse.jsp
+			</result>
+			<result name="error">
+				/WEB-INF/pages/user/user_browse.jsp
+			</result>
+		</action>
+
+		<!-- 用户信息填加 -->
+		<action name="user_add_before" class="userAction"
+			method="addBefore">
+			<result name="success">
+				/WEB-INF/pages/user/user_add.jsp
+			</result>
+			<result name="error">
+				/WEB-INF/pages/user/user_add.jsp
+			</result>
+		</action>
+		<action name="user_add" class="userAction" method="add">
+			<result name="input">
+				/WEB-INF/pages/user/user_add.jsp
+			</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">user_browse</param>
+				<param name="message">${message}</param>
+				<param name="pageSize">${pageSize}</param>
+			</result>
+			<result name="error">
+				/WEB-INF/pages/user/user_add.jsp
+			</result>
+		</action>
+
+		<!-- 用户信息删除 -->
+		<action name="user_delete" class="userAction" method="delete">
+			<result type="redirect-action">
+				<param name="actionName">user_browse</param>
+				<param name="message">${message}</param>
+				<param name="page">${page}</param>
+				<param name="pageSize">${pageSize}</param>
+			</result>
+			<result name="error">
+				/WEB-INF/pages/user/user_browse.jsp
+			</result>
+		</action>
+
+		<!-- 用户信息修改 -->
+		<action name="user_update_before" class="userAction"
+			method="updateBefore">
+			<result name="success">
+				/WEB-INF/pages/user/user_update.jsp
+			</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">user_browse</param>
+				<param name="message">${message}</param>
+				<param name="page">${page}</param>
+				<param name="pageSize">${pageSize}</param>
+			</result>
+		</action>
+		<action name="user_update" class="userAction" method="update">
+			<result name="input">
+				/WEB-INF/pages/user/user_update.jsp
+			</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">user_browse</param>
+				<param name="message">${message}</param>
+				<param name="page">${page}</param>
+				<param name="pageSize">${pageSize}</param>
+			</result>
+			<result name="error">
+				/WEB-INF/pages/user/user_update.jsp
+			</result>
+		</action>
+		
+		<!-- 修改当前用户密码 -->
+		<action name="modify_pwd" class="modifyUserPwdAction"
+			method="updatePwdExecute">
+			<result name="success">
+				/WEB-INF/pages/user/modify_pwd.jsp
+			</result>
+			<result name="input">
+				/WEB-INF/pages/user/modify_pwd.jsp
+			</result>
+			<result name="error">
+				/WEB-INF/pages/user/modify_pwd.jsp
+			</result>
+		</action>
+		<action name="modify_pwd_page" class="modifyUserPwdAction"
+			method="updatePwd">
+			<result name="success">
+				/WEB-INF/pages/user/modify_pwd.jsp
+			</result>
+			<result name="input">
+				/WEB-INF/pages/user/modify_pwd.jsp
+			</result>
+			<result name="error">
+				/WEB-INF/pages/user/modify_pwd.jsp
+			</result>
+		</action>
+	</package>
+	
+	
+	<!-- 角色管理 -->
+	<package name="role" namespace="/role" extends="elsp-default">
+	
+		<!-- 角色信息查询 -->
+		<action name="role_browse" class="roleAction" method="browse">
+			<result name="success">
+				/WEB-INF/pages/role/role_list.jsp
+			</result>
+			<result name="error">
+				/WEB-INF/pages/role/role_list.jsp
+			</result>
+		</action>
+		
+		<!-- 角色信息填加 -->
+		<action name="role_add_form" class="roleAction"
+			method="addRoleFrom">
+			<result name="success">
+				/WEB-INF/pages/role/role_add_form.jsp
+			</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">role_browse</param>
+				<param name="message">${message}</param>
+			</result>
+		</action>
+		<action name="role_add" class="roleAction" method="addRole">
+			<result name="input">
+				/WEB-INF/pages/role/role_add_form.jsp
+			</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">role_browse</param>
+				<param name="message">${message}</param>
+				<param name="page">${page}</param>
+				<param name="pageSize">${pageSize}</param>
+			</result>
+			<result name="error">
+				<!-- <param name="actionName">role_add_form</param>
+				<param name="message">${message}</param>  -->
+				/WEB-INF/pages/role/role_add_form.jsp
+			</result>
+		</action>
+		
+		<!-- 角色信息编辑 -->
+		<action name="role_edit_form" class="roleAction"
+			method="editRoleFrom">
+			<result name="success">
+				/WEB-INF/pages/role/role_edit_form.jsp
+			</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">role_browse</param>
+				<param name="message">${message}</param>
+				<param name="page">${page}</param>
+				<param name="pageSize">${pageSize}</param>				
+			</result>
+		</action>
+		<action name="role_edit" class="roleAction" method="editRole">
+			<result name="input">
+				/WEB-INF/pages/role/role_edit_form.jsp
+			</result>
+			<result name="success" type="redirect-action">
+				<param name="actionName">role_browse</param>
+				<param name="message">${message}</param>
+				<param name="page">${page}</param>
+				<param name="pageSize">${pageSize}</param>
+			</result>
+			<result name="error" type="redirect-action">
+				 <param name="actionName">role_edit_form</param>
+				<param name="message">${message}</param>
+				<param name="id">${id}</param> 
+			</result>
+		</action>
+
+		<!-- 角色信息删除 -->
+		<action name="role_delete" class="roleAction" method="delete">
+			<result name="success" type="redirect-action">
+				<param name="actionName">role_browse</param>
+				<param name="message">${message}</param>
+				<param name="page">${page}</param>
+				<param name="pageSize">${pageSize}</param>
+			</result>
+			<result name="error" type="redirect-action">
+				<param name="actionName">role_browse</param>
+				<param name="message">${message}</param>
+			</result>
+		</action>
+	</package>
+	
+	<!-- 操作日志信息 -->
+	<package name="loginfo" namespace="/loginfo"
+		extends="elsp-default">
+		<action name="logInfoSearch" class="logInfoAction"
+			method="logInfoSearch">
+			<result name="success">
+				/WEB-INF/pages/loginfo/log_info_search.jsp
+			</result>
+			<result name="error">
+				/WEB-INF/pages/loginfo/log_info_search.jsp
+			</result>
+		</action>
+		<action name="logInfoSearchExecute" class="logInfoAction"
+			method="logInfoSearchExecute">
+			<result name="success">
+				/WEB-INF/pages/loginfo/log_info_list.jsp
+			</result>
+			<result name="error">
+				/WEB-INF/pages/loginfo/log_info_search.jsp
+			</result>
+		</action>
+		<action name="logInfoBrowse" class="logInfoAction"
+			method="logInfoBrowse">
+			<result name="success">
+				/WEB-INF/pages/loginfo/log_info_browse.jsp
+			</result>
+		</action>
+	</package>
+	
+</struts>

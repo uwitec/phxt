@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-autowire="byName">
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="list*" read-only="true" />
+			<tx:method name="*" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<!-- 第一个* 表示 返回任意的类型 -->
+		<!-- service.. 代表service包及其子包-->
+		<!-- 第二个* 表示 该包下的所有类 -->
+		<!-- 第三个* 表示 类下的所有方法 -->
+		<!-- ( .. ) 表示 方法带任意参数 -->
+		<aop:advisor
+			pointcut="execution(* cn.com.framework.service..*.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config>
+	<!-- 
+		<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+		<tx:method name="get*" read-only="true" />
+		<tx:method name="list*" read-only="true" />
+		<tx:method name="*" rollback-for="Exception" />
+		</tx:attributes>
+		</tx:advice>
+	-->
+	<bean id="service"
+		class="cn.com.framework.service.impl.ServiceImpl">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="excelService"
+		class="cn.com.framework.service.excel.impl.ExcelServiceImpl">
+		<property name="dao" ref="dao" />
+	</bean>
+</beans>

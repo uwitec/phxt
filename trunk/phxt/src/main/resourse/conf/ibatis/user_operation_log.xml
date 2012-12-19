@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="UserOperateLog">
+	<typeAlias alias="String" type="java.lang.String" />
+	<typeAlias alias="userOperateLog"
+		type="com.neusoft.example.ui.domain.user.UserOperateLog" />
+	<resultMap id="loginfo-result" class="userOperateLog">
+		<result property="id" column="ID" />
+		<result property="hostIp" column="HOST_IP" />
+		<result property="userId" column="USER_ID" />
+		<result property="loginName" column="LOGIN_NAME" />
+		<result property="operTime" column="OPER_TIME" />
+		<result property="operType" column="OPER_TYPE" />
+		<result property="operDesc" column="OPER_DESC" />
+	</resultMap>
+
+	<insert id="insert" parameterClass="userOperateLog">
+		INSERT INTO ELSP_LOG_INFO_T
+		(id,host_ip,user_id,login_name,oper_time,oper_type,oper_desc)
+		VALUES (#id#,#hostIp#,
+		#userId#,#loginName#,#operTime#,#operType#,#operDesc#)
+	</insert>
+
+	<select id="getCount" resultClass="Integer"
+		parameterClass="userOperateLog">
+		SELECT COUNT(*) FROM ELSP_log_info_t
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="loginName">
+				login_name = #loginName#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="operType">
+				oper_type = #operType#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="operTime">
+				TO_DATE(oper_time,'YYYY-MM-DD HH24:MI:SS')
+				<![CDATA[ >= ]]>
+				TO_DATE(#operTime#,'YYYY-MM-DD HH24:MI:SS')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="endTime">
+				TO_DATE(oper_time,'YYYY-MM-DD HH24:MI:SS')
+				<![CDATA[ <= ]]>
+				TO_DATE(#endTime#,'YYYY-MM-DD HH24:MI:SS')
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getUserOperateLogs" parameterClass="userOperateLog"
+		resultMap="loginfo-result">
+		SELECT id, host_ip, user_id, login_name,
+		TO_CHAR(TO_DATE(oper_time,'yyyy-MM-dd HH24:mi:ss'),'yyyy-MM-dd HH24:mi:ss') as oper_time,
+		oper_type, 
+		oper_desc FROM ELSP_log_info_t
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="operType">
+				oper_type = #operType#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="loginName">
+				login_name = #loginName#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="operTime">
+				TO_DATE(oper_time,'YYYY-MM-DD HH24:MI:SS')
+				<![CDATA[ >= ]]>
+				TO_DATE(#operTime#,'YYYY-MM-DD HH24:MI:SS')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="endTime">
+				TO_DATE(oper_time,'YYYY-MM-DD HH24:MI:SS')
+				<![CDATA[ <= ]]>
+				TO_DATE(#endTime#,'YYYY-MM-DD HH24:MI:SS')
+			</isNotEmpty>
+		</dynamic>
+		order by oper_time desc
+	</select>
+
+	<select id="getUserOperateLog" parameterClass="String"
+		resultMap="loginfo-result">
+		SELECT id, host_ip, user_id, login_name,
+		TO_CHAR(TO_DATE(oper_time,'yyyy-MM-dd HH24:mi:ss'),'yyyy-MM-dd HH24:mi:ss') as oper_time,
+		oper_type, oper_desc FROM ELSP_log_info_t where id=#id#
+	</select>
+</sqlMap>
