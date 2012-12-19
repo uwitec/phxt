@@ -1,5 +1,5 @@
 <project basedir="." default="publish" name="system">
-	<target name="init" description="设置初始化打 war 包需要的路径变量">
+	<target name="init" description="设置初始化打 war 包包需要的路径变量">
 		<property name="name" value="system" />
 		<property name="src" value="${basedir}/src" />
 		<property name="lib" value="${basedir}/WebRoot/WEB-INF/lib" />
