@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="User">
+	<typeAlias alias="String" type="java.lang.String" />
+	<typeAlias alias="Map" type="java.util.Map" />
+	<typeAlias alias="user" type="com.neusoft.example.ui.domain.user.User" />
+
+	<resultMap id="user-result" class="user">
+		<result property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="password" column="PASSWORD" />
+		<result property="status" column="STATUS" />
+		<result property="email" column="EMAIL" />
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="roleId" column="ROLE_ID" />
+		<result property="creater" column="CREATER" />
+	</resultMap>
+
+	<resultMap id="user-browse-result" class="user">
+		<result property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="status" column="STATUS" />
+		<result property="email" column="EMAIL" />
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="roleName" column="ROLE_NAME" />
+	</resultMap>
+
+	<resultMap id="userName" class="user">
+		<result property="name" column="NAME" />
+		<result property="email" column="EMAIL" />
+	</resultMap>
+
+	<select id="getUser" parameterClass="user"
+		resultMap="user-result">
+		select u.id, ur.role_id ,u.name, u.email,u.password,u.status,
+		TO_CHAR(TO_DATE(u.create_time,'yyyy-MM-dd
+		HH24:mi:ss'),'yyyy-MM-dd HH24:mi:ss') as create_time ,creater from
+		ELSP_USER_T u, ELSP_USER_ROLE_MAP_T ur where u.id = ur.user_id
+		<dynamic>
+			<isNotEmpty prepend="and" property="email">
+				u.email = #email#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="name">
+				u.name = #name#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="password">
+				u.password = #password#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="id">
+				u.id
+				<![CDATA[ <> ]]>
+				#id#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getUserById" parameterClass="String"
+		resultMap="user-result">
+		select u.id, ur.role_id ,u.name, u.email,u.password,u.status,
+		TO_CHAR(TO_DATE(u.create_time,'yyyy-MM-dd
+		HH24:mi:ss'),'yyyy-MM-dd HH24:mi:ss') as create_time ,creater from
+		ELSP_USER_T u, ELSP_USER_ROLE_MAP_T ur where u.id=#id# and
+		#id# = ur.user_id
+	</select>
+
+	<select id="getCount" parameterClass="user" resultClass="int">
+		select count(1) from
+		ELSP_USER_T u, ELSP_ROLE_T role, ELSP_USER_ROLE_MAP_T ur
+		where u.id = ur.user_id and role.id = ur.role_id		
+		<dynamic>
+			<isNotEmpty property="status">u.STATUS = #status#</isNotEmpty>
+			<isNotEmpty prepend="and" property="name">
+				u.NAME like '%'||#name#||'%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="id">
+				u.creater like '%'||#id#||'%'
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getUsers" parameterClass="user"
+		resultMap="user-browse-result">
+		select u.id, role.role_name,u.name,
+		u.email,status,
+		TO_CHAR(TO_DATE(u.create_time,'yyyy-MM-dd
+		HH24:mi:ss'),'yyyy-MM-dd HH24:mi:ss') as create_time from
+		ELSP_USER_T u, ELSP_ROLE_T role, ELSP_USER_ROLE_MAP_T ur
+		where u.id = ur.user_id and role.id = ur.role_id
+		<dynamic>
+			<isNotEmpty prepend="and" property="status">
+				u.STATUS = #status#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="name">
+				u.NAME like '%'||#name#||'%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="id">
+				u.creater like '%'||#id#||'%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="email">
+				u.EMAIL
+				<![CDATA[ <> ]]>
+				#email#
+			</isNotEmpty>
+		</dynamic>
+		order by u.create_time desc
+	</select>
+
+	<insert id="insert" parameterClass="user">
+		insert into ELSP_USER_T (id, name, email, password, status,
+		create_time,creater) values (#id#, #name#,#email#, #password#,
+		#status#,#createTime#,#creater#)
+	</insert>
+
+	<insert id="insertUserRole" parameterClass="Map">
+		insert into ELSP_USER_ROLE_MAP_T (user_id,role_id) values
+		(#userId#,#roleId#)
+	</insert>
+
+	<delete id="deleteUserById" parameterClass="String">
+		delete from ELSP_USER_T WHERE ID=#id#
+	</delete>
+
+	<delete id="deleteUserRoleById" parameterClass="String">
+		delete from ELSP_USER_ROLE_MAP_T WHERE USER_ID=#id#
+	</delete>
+
+	<update id="updateUser" parameterClass="user">
+		update ELSP_USER_T set name = #name# 
+		<isNotEmpty prepend="," property="password">
+			password =#password#
+		</isNotEmpty>
+		,status = #status#, email=#email# where id=#id#
+	</update>
+
+	<update id="updateUserRole" parameterClass="user">
+		update ELSP_USER_ROLE_MAP_T SET ROLE_ID=#roleId# where
+		user_id=#id#
+	</update>
+
+	<!-- 用于查询当前用户的日志或当前用户能管理的用户日志的下拉列表显示 -->
+	<select id="getAllNames" resultMap="userName" parameterClass="String">
+		SELECT name,email FROM ELSP_USER_T 
+		where creater like 'admin-'||#id#||'%' or id =#id#
+		order by id 
+	</select>
+
+</sqlMap>

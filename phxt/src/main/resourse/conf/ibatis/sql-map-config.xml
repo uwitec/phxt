@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<!-- 下面属性依次设置了： -->
+	<!-- cacheModelsEnabled="true" 运行时开启实例的缓存 -->
+	<!-- enhancementEnabled="true" 全局化的字节码增强 -->
+	<!-- lazyLoadingEnabled="true" 持久化数据延迟加载 -->
+	<!-- maxRequests="15" 同时执行SQL语句的最大运行数 -->
+	<!-- maxSessions="10" 同一时间内活动的最大Sessio数 -->
+	<!-- maxTransactions="5" 最大事务处理的线程数 -->
+	<!-- useStatementNamespaces="true" 指定了在SQLMAP映射文件中是否用全限定名来引用映射声明 -->
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" maxRequests="15" maxSessions="10"
+		maxTransactions="5" useStatementNamespaces="true" />
+	<sqlMap resource="conf/ibatis/z_order.xml" />
+</sqlMapConfig>

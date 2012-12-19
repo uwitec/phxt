@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="ModifyUserPwd">
+	<typeAlias alias="String" type="java.lang.String" />
+	<typeAlias alias="modifyUserPwd" type="com.neusoft.example.ui.domain.user.ModifyUserPwd" />
+ 
+ 	<resultMap id="user-result" class="modifyUserPwd">
+		<result property="id" column="ID" />
+		<result property="password" column="PASSWORD" />
+
+	</resultMap>
+ 
+ 	<select id="getModifyUserPwd" parameterClass="modifyUserPwd" resultClass="String">
+		select password from ELSP_USER_T
+		<dynamic prepend="where">
+			<isNotEmpty property="id">
+				ID = #id#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<update id="update" parameterClass="modifyUserPwd">
+		UPDATE ELSP_USER_T
+		SET 
+		PASSWORD =#newPwd#
+		WHERE ID = #id#
+	</update>
+
+</sqlMap>

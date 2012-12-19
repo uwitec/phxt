@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Role2Per">
+	<typeAlias alias="String" type="java.lang.String" />
+	<typeAlias alias="role2Per" type="com.neusoft.example.ui.domain.security.Role2Per" />
+	
+	<resultMap id="role2Per-result" class="role2Per">
+		<result property="permissionId" column="PER_ID" />
+	</resultMap>
+	
+	<insert id="insert" parameterClass="role2Per">
+		INSERT INTO 
+			ELSP_ROLE_PERMISSION_T 
+			(ROLE_ID, 
+			 PER_ID) 
+	    VALUES 
+	    	(#roleId#, 
+	    	 #permissionId#)
+    </insert>
+    
+    <select id="getPerIdByRoleId" parameterClass="String" resultMap="role2Per-result">
+		SELECT 
+			PER_ID 
+		FROM 
+			ELSP_ROLE_PERMISSION_T
+		where
+			ROLE_ID=#id#
+			
+	</select>
+	
+    <delete id="delete" parameterClass="String">
+	    DELETE FROM ELSP_ROLE_PERMISSION_T
+	    WHERE ROLE_ID=#id#
+    </delete>
+   
+</sqlMap>

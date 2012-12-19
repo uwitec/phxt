@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Fsxx">
+	<typeAlias alias="String" type="java.lang.String" />
+	<typeAlias alias="fsxxBean"
+		type="cn.com.framework.beans.order.FsxxBean" />
+
+	<resultMap id="order-result" class="fsxxBean">
+		<result property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="je" column="JE" />
+		<result property="fileName" column="filename" />
+		<result property="dr_time" column="dr_time" />
+	</resultMap>
+	<resultMap id="order-tjresult" class="fsxxBean">
+		<result property="fileName" column="filename" />
+		<result property="dr_time" column="dr_time" />
+	</resultMap>
+
+	<select id="getAllFiles" parameterClass="String"
+		resultMap="order-tjresult">
+		select distinct dr_time,filename from z_order order by dr_time
+		desc
+	</select>
+	<select id="getAllOrders" parameterClass="fsxxBean"
+		resultMap="order-result">
+		SELECT * FROM z_order
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="id">
+				id = #id#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="name">
+				name like '%$name$%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="fileName">
+				filename = #fileName#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="dr_time">
+				dr_time = #dr_time#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<insert id="insert" parameterClass="fsxxBean">
+		INSERT INTO z_order (name, je, filename, dr_time) VALUES
+		(#name#, #je#, #fileName#, #dr_time#)
+	</insert>
+	<delete id="delete" parameterClass="String">
+		DELETE FROM z_order WHERE ID=#id#
+	</delete>
+</sqlMap>

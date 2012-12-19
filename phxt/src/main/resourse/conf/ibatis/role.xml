@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Role">
+	<typeAlias alias="String" type="java.lang.String" />
+	<typeAlias alias="role" type="com.neusoft.example.ui.domain.user.Role" />
+
+	<resultMap id="role-result" class="role">
+		<result property="id" column="ID" />
+		<result property="name" column="ROLE_NAME" />
+		<result property="desc" column="ROLE_DESC" />
+	</resultMap>
+	
+	<select id="getRole" parameterClass="role" resultMap="role-result">
+		SELECT 
+			id, role_name, role_desc 
+		FROM 
+			ELSP_ROLE_T
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="and" property="id">
+				ID=#id#
+			</isNotEmpty>
+		</dynamic>
+			
+	</select>
+	
+	<select id="getRoleByName" parameterClass="role" resultMap="role-result">
+		SELECT id, role_name, role_desc 
+		FROM ELSP_ROLE_T
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="and" property="id">
+				ID<![CDATA[<>]]>#id#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="name">
+				role_name=#name#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<update id="update" parameterClass="role">
+		UPDATE ELSP_ROLE_T
+		SET 
+			ROLE_NAME = #name#,
+			ROLE_DESC = #desc#
+		WHERE 
+			ID=#id#
+	</update>
+	
+	<select id="getRoles" parameterClass="String" resultMap="role-result">
+		SELECT id, role_name, role_desc FROM ELSP_ROLE_T 
+		where creater like '%'||#creater#||'%'
+		order by id desc
+	</select>
+
+	<select id="getCount" parameterClass="String" resultClass="Integer">
+		SELECT COUNT(*)
+		FROM ELSP_ROLE_T
+		where creater like '%'||#creater#||'%'
+	</select>
+	
+	<insert id="insert" parameterClass="role">
+		INSERT INTO 
+			ELSP_ROLE_T
+			(ID, 
+			 ROLE_NAME, 
+			 ROLE_DESC,
+			 CREATER) 
+	    VALUES 
+	    	(#id#, 
+	    	 #name#, 
+	    	 #desc#,
+	    	 #creater#)
+    </insert>
+    
+    <delete id="delete" parameterClass="String">
+    	DELETE FROM ELSP_ROLE_T
+		WHERE ID=#id#
+    </delete>
+    
+    <select id="getPerUserList" parameterClass="String" resultClass="String">
+		SELECT 
+			user_id
+		FROM 
+			ELSP_user_role_MAP_t
+		WHERE 
+			role_id=#id#
+	</select>
+	
+</sqlMap>

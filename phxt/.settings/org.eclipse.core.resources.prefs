@@ -1,0 +1,7 @@
+#Mon Dec 10 14:34:04 CST 2012
+eclipse.preferences.version=1
+encoding//src/main/java/dao/cn/com/framework/base/dao/ExtendSqlMapDao.java=UTF-8
+encoding//src/main/java/dao/cn/com/framework/base/dao/SqlMapDao.java=UTF-8
+encoding//src/main/java/service/cn/com/framework/exceptions/DataAccessException.java=UTF-8
+encoding//src/main/java/service/cn/com/framework/exceptions/DataAccessIntegrityViolationException.java=UTF-8
+encoding//src/main/java/service/cn/com/framework/service/impl/ServiceImpl.java=UTF-8

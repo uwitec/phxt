@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 该属性指定Struts 2文件上传中整个请求内容允许的最大字节数 -->
+	<constant name="struts.multipart.maxSize" value="104857600" />
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+	<constant name="struts.multipart.maxSize" value="10000000" />
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.serve.static.browserCache" value="true" />
+	<constant name="struts.custom.i18n.resources"
+		value="ApplicationResources" />
+	<package name="default" extends="struts-default">
+		<interceptors>
+			<interceptor name="exception"
+				class="cn.com.framework.core.FrameworkExceptionInterceptor" />
+			<interceptor-stack name="framedefault">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="exception" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="framedefault" />
+		<global-results>
+			<result name="Exception">/Exception.jsp</result>
+			<result name="error">/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception"
+				result="Exception" />
+		</global-exception-mappings>
+	</package>
+	<include file="struts-excel.xml" />
+	<include file="struts-default.xml" />
+</struts>
