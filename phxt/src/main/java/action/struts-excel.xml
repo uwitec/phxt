@@ -12,5 +12,16 @@
 			<result name="success">excel/excelUpload.jsp</result>
 			<result name="list">excel/excelList.jsp</result>
 		</action>
+		
+	</package>
+	
+	<package name="tszlgl" namespace="/" extends="default">
+		<action name="tszlglAction"        
+			class="cn.com.framework.tszlgl.TszlGlAction">
+			<!-- /success.jsp表示相对于当前JSP的路径，如果没有则是工程的根目录 -->
+			<result name="lrok">tszlgl/tszllrOk.jsp</result>
+			<result name="list">tszlgl/tszllist.jsp</result>
+			<result name="xgcx">tszlgl/tszlXg.jsp</result>
+		</action>
 	</package>
 </struts>

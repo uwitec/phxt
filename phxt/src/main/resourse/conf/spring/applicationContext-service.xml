@@ -43,4 +43,10 @@
 		class="cn.com.framework.service.excel.impl.ExcelServiceImpl">
 		<property name="dao" ref="dao" />
 	</bean>
+	
+	<bean id="tszlglservice"
+		class="cn.com.framework.service.tszl.impl.TszlGlServiceImpl">
+		<property name="dao" ref="dao" />
+	</bean>
+	
 </beans>

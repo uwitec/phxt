@@ -15,4 +15,7 @@
 		lazyLoadingEnabled="true" maxRequests="15" maxSessions="10"
 		maxTransactions="5" useStatementNamespaces="true" />
 	<sqlMap resource="conf/ibatis/z_order.xml" />
+	
+	<sqlMap resource="conf/ibatis/tszlgl.xml" />
+	
 </sqlMapConfig>
