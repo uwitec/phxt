@@ -23,7 +23,9 @@
 		</interceptors>
 		<default-interceptor-ref name="framedefault" />
 		<global-results>
+			<!-- 
 			<result name="Exception">/Exception.jsp</result>
+			 -->
 			<result name="error">/error.jsp</result>
 		</global-results>
 		<global-exception-mappings>
